@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Text, View, Button, Alert } from "react-native";
+import { Alert, Button, Text, View } from "react-native";
+import styles from './theme/styles';
 
 export default function Index() {
   const [count, setCount] = useState(0); // フックを用いて状態管理
@@ -14,14 +15,9 @@ export default function Index() {
   };
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.container}>
       <Text>{ count }回ボタンをタップしました。</Text>
+      <View style={styles.space} />
       <Button
         onPress={
           () => handleButtonPress()
