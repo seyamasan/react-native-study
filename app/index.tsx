@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, View, Button, Alert } from "react-native";
 
 export default function Index() {
   return (
@@ -9,7 +9,12 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>ボタンです。</Text>
+      <Button
+        onPress={() => Alert.alert('Simple Button pressed')} // このアラートはモバイルのみで表示されるみたい
+        title="Learn More"
+        color="#841584"
+      />
     </View>
   );
 }
