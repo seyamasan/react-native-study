@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Alert, Button, Text, View } from "react-native";
+import colors from '../theme/colors';
 import styles from '../theme/styles';
 
 export default function Counter() {
@@ -23,7 +24,7 @@ export default function Counter() {
           () => handleButtonPress()
         } 
         title="カウントアップ"
-        color="#841584"
+        color={colors.primary}
       />
     </View>
   );

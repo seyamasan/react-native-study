@@ -1,5 +1,6 @@
 import { ScrollView, View, Button, Text } from "react-native";
 import { Link } from "expo-router";
+import colors from './theme/colors';
 import styles from './theme/styles';
 
 export default function Index() {
@@ -8,7 +9,7 @@ export default function Index() {
       {/* スクロール部分 */}
       <ScrollView contentContainerStyle={styles.container}>
         <Link href="/counter" asChild>
-          <Button title="カウンター画面へGo" color="#841584" />
+          <Button title="カウンター画面へGo" color={colors.primary} />
         </Link>
       </ScrollView>
     </View>
