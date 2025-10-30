@@ -8,11 +8,11 @@ export default function Index() {
     <View style={{ flex: 1 }}>
       {/* スクロール部分 */}
       <ScrollView contentContainerStyle={styles.container}>
-        <Link href="/counter" asChild>
+        <Link href="./screen/Counter" asChild>
           <Button title="カウンター画面へGo" color={colors.primary} />
         </Link>
         <View style={styles.space} />
-        <Link href="/draggable-flatlist-sample" asChild>
+        <Link href="./screen/DraggableFlatListSample" asChild>
           <Button title="draggable-flatlistのサンプル画面へGo" color={colors.primary} />
         </Link>
       </ScrollView>
