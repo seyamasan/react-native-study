@@ -28,8 +28,8 @@ export default function DraggableFlatListSample() {
   const renderItem = ({ item, drag, isActive }: RenderItemParams<ListItem>) => {
     return (
       <TouchableOpacity
-        onLongPress={drag}
-        disabled={isActive}
+        onLongPress={drag} // 長押しでドラッグを開始する
+        disabled={isActive} // ドラッグ中はインタラクション無効化
         style={[
           styles.row,
           { backgroundColor: item.backgroundColor },
@@ -55,7 +55,7 @@ export default function DraggableFlatListSample() {
 
       <DraggableFlatList
         data={data}
-        keyExtractor={(item) => item.id} // ユニークなキーを指定
+        keyExtractor={(item) => item.id} // ユニークなキー(String)を指定
         renderItem={renderItem} // 描画するコンポーネント
         ItemSeparatorComponent={() => <View style={styles.separator} />} // アイテム間の区切り
         onDragEnd={({ data: newData }) => {
