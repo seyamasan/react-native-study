@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 24,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: '#E0E0E0',
     backgroundColor: '#FFFFFF',
