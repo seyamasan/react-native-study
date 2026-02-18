@@ -15,6 +15,10 @@ export default function Index() {
         <Link href="./screen/DraggableFlatListSample" asChild>
           <Button title="draggable-flatlistのサンプル画面へGo" color={colors.primary} />
         </Link>
+        <View style={styles.space} />
+        <Link href="./screen/Camera" asChild>
+          <Button title="カメラのサンプル画面へGo" color={colors.primary} />
+        </Link>
       </ScrollView>
     </View>
   );
