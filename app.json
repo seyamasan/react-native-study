@@ -35,15 +35,7 @@
         }
       ],
       "expo-font",
-      "expo-web-browser",
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "カメラへのアクセスを許可しますか？",
-          "microphonePermission": "マイクへのアクセスを許可しますか？",
-          "recordAudioAndroid": true
-        }
-      ]
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
