@@ -4,6 +4,7 @@ import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Camera() {
+  const [camera, setCamera] = useState<CameraView | null>(null);
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
 
@@ -22,24 +23,46 @@ export default function Camera() {
     );
   }
 
+  // 写真の撮影
+  async function takePicture() {
+    if (camera) {
+      const photo = await camera.takePictureAsync();
+      
+      // Android および iOS ではローカル画像ファイルへの URI
+      // Web では base64 文字列
+      console.log(photo.uri);
+      console.log(photo.base64);
+    }
+  }
+
   function toggleCameraFacing() {
     setFacing(current => (current === 'back' ? 'front' : 'back'));
   }
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing} />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[styles.button, facing === 'back' ? styles.buttonBack : styles.buttonFront]}
-          onPress={toggleCameraFacing}
-        >
-          <Ionicons
-            name={facing === 'back' ? 'camera-reverse' : 'camera-reverse-outline'}
-            size={24}
-            color={facing === 'back' ? '#000' : '#fff'}
-          />
-        </TouchableOpacity>
+      <CameraView 
+        style={styles.camera}
+        ref={(ref) => setCamera(ref)}
+        facing={facing} 
+      />
+
+      <View style={styles.bottomBar}>
+        <View style={styles.controlsRow}>
+          <View style={styles.sidePlaceholder} />
+          <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
+            <View style={styles.captureInner} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.cameraReverseButton} onPress={toggleCameraFacing}>
+            <Ionicons
+              name={facing === 'back' ? 'camera-reverse-outline' : 'camera-reverse'}
+              size={24}
+              color="#fff"
+              style={styles.cameraReverseIcon}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -57,30 +80,58 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 64,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    width: '100%',
-    paddingHorizontal: 64,
+  text: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
   },
-  button: {
+  bottomBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    paddingTop: 12,
+    paddingBottom: 40,
+    backgroundColor: 'rgba(0,0,0,0.35)',
+  },
+  controlsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 32,
+  },
+  sidePlaceholder: {
+    width: 52,
+    height: 52,
+  },
+  captureButton: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: '#fff',
+    borderWidth: 4,
+    borderColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 20,
+  },
+  captureInner: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: '#fff',
+  },
+  cameraReverseButton: {
     width: 56,
     height: 56,
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#888',
   },
-  buttonBack: {
-    backgroundColor: '#fff',
-  },
-  buttonFront: {
-    backgroundColor: '#000',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
+  cameraReverseIcon: {
+    position: 'absolute',
+    alignSelf: 'center',
   },
 });
