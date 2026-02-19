@@ -1,6 +1,7 @@
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Camera() {
   const [facing, setFacing] = useState<CameraType>('back');
@@ -29,8 +30,15 @@ export default function Camera() {
     <View style={styles.container}>
       <CameraView style={styles.camera} facing={facing} />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-          <Text style={styles.text}>Flip Camera</Text>
+        <TouchableOpacity
+          style={[styles.button, facing === 'back' ? styles.buttonBack : styles.buttonFront]}
+          onPress={toggleCameraFacing}
+        >
+          <Ionicons
+            name={facing === 'back' ? 'camera-reverse' : 'camera-reverse-outline'}
+            size={24}
+            color={facing === 'back' ? '#000' : '#fff'}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -58,8 +66,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 64,
   },
   button: {
-    flex: 1,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
     alignItems: 'center',
+  },
+  buttonBack: {
+    backgroundColor: '#fff',
+  },
+  buttonFront: {
+    backgroundColor: '#000',
   },
   text: {
     fontSize: 24,
