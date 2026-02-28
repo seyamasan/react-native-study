@@ -141,6 +141,7 @@ export default function Camera() {
         </View>
       )}
 
+      {/* カメラ画面 */}
       <CameraView 
         style={styles.camera}
         ref={(ref) => setCamera(ref)}
@@ -152,24 +153,27 @@ export default function Camera() {
         <View style={styles.controlsRow}>
           {/* 左側：モード切り替えボタン */}
           <View style={styles.sideArea}>
-            <View style={styles.modeRow}>
-              <Ionicons
-                name="camera-outline"
-                size={18}
-                color={cameraMode === 'picture' ? '#fff' : '#aaa'}
-              />
-              <Switch
-                value={cameraMode === 'video'}
-                onValueChange={onChangeModeSwitch}
-                trackColor={{ false: '#666', true: '#e53935' }}
-                thumbColor="#fff"
-              />
-              <Ionicons
-                name="videocam-outline"
-                size={18}
-                color={cameraMode === 'video' ? '#fff' : '#aaa'}
-              />
-            </View>
+            {/* Web では常に非表示、ネイティブでも録画中は非表示 */}
+            {!isWeb && !isRecording && (
+              <View style={styles.modeRow}>
+                <Ionicons
+                  name="camera-outline"
+                  size={18}
+                  color={cameraMode === 'picture' ? '#fff' : '#aaa'}
+                />
+                <Switch
+                  value={cameraMode === 'video'}
+                  onValueChange={onChangeModeSwitch}
+                  trackColor={{ false: '#666', true: '#e53935' }}
+                  thumbColor="#fff"
+                />
+                <Ionicons
+                  name="videocam-outline"
+                  size={18}
+                  color={cameraMode === 'video' ? '#fff' : '#aaa'}
+                />
+              </View>
+            )}
           </View>
 
           {/* 中央：シャッターボタン */}
@@ -192,14 +196,17 @@ export default function Camera() {
 
           {/* 右側：インカメ/外カメ切り替え */}
           <View style={styles.sideArea}>
-            <TouchableOpacity style={styles.cameraReverseButton} onPress={toggleCameraFacing}>
-              <Ionicons
-                name={facing === 'back' ? 'camera-reverse-outline' : 'camera-reverse'}
-                size={24}
-                color="#fff"
-                style={styles.cameraReverseIcon}
-              />
-            </TouchableOpacity>
+            {/* 録画中は非表示 */}
+            {!isRecording && (
+              <TouchableOpacity style={styles.cameraReverseButton} onPress={toggleCameraFacing}>
+                <Ionicons
+                  name={facing === 'back' ? 'camera-reverse-outline' : 'camera-reverse'}
+                  size={24}
+                  color="#fff"
+                  style={styles.cameraReverseIcon}
+                />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </View>
