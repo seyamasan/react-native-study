@@ -1,10 +1,11 @@
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { CameraView, CameraType, useCameraPermissions, CameraMode } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Camera() {
   const [camera, setCamera] = useState<CameraView | null>(null);
+  const [cameraMode, setCameraMode] = useState<CameraMode>('picture');
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
 
@@ -33,6 +34,27 @@ export default function Camera() {
       console.log(photo.uri);
       console.log(photo.base64);
     }
+  }
+
+  // 録画の開始
+  const startRecording = async () => {
+    if (!camera) return;
+
+    const result = await camera.recordAsync(); // Web非対応
+
+    console.log(result?.uri);
+  };
+
+  // 録画の停止
+  const stopRecording = () => {
+    if (!camera) return;
+
+    camera.stopRecording();
+  };
+
+  // カメラのモードを切り替え
+  function changeCameraMode() {
+    setCameraMode(current => (current === 'picture' ? 'video' : 'picture'));
   }
 
   function toggleCameraFacing() {
