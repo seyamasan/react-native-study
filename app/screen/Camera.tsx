@@ -31,34 +31,18 @@ export default function Camera() {
     };
   }, [isRecording]);
 
-  if (!cameraPermission || (!isWeb && !micPermission)) {
-    return <View />;
+  {/* ここから状態切り替え */}
+
+  // カメラのモードを切り替え
+  const onChangeModeSwitch = (value: boolean) => {
+    setCameraMode(value ? 'video' : 'picture');
+  };
+
+  function toggleCameraFacing() {
+    setFacing(current => (current === 'back' ? 'front' : 'back'));
   }
 
-  // Web: カメラだけ / モバイル: カメラ＋マイク
-  if (
-    !cameraPermission.granted ||
-    (!isWeb && micPermission && !micPermission.granted)
-  ) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.message}>
-          {isWeb
-            ? 'カメラの権限を許可してください。'
-            : 'カメラとマイクの権限を許可してください。'}
-        </Text>
-        <Button
-          onPress={async () => {
-            await requestCameraPermission();
-            if (!isWeb) {
-              await requestMicPermission();
-            }
-          }}
-          title="権限を許可する"
-        />
-      </View>
-    );
-  }
+  {/* ここからロジック*/}
 
   // 写真の撮影
   async function takePicture() {
@@ -104,15 +88,6 @@ export default function Camera() {
     }
   };
 
-  // カメラのモードを切り替え
-  const onChangeModeSwitch = (value: boolean) => {
-    setCameraMode(value ? 'video' : 'picture');
-  };
-
-  function toggleCameraFacing() {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
-  }
-
   // mm:ss フォーマット
   const formatTime = (totalSeconds: number) => {
     const m = Math.floor(totalSeconds / 60)
@@ -121,6 +96,38 @@ export default function Camera() {
     const s = (totalSeconds % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
   };
+
+  {/* ここからView */}
+
+  if (!cameraPermission || (!isWeb && !micPermission)) {
+    // 権限が読み込み中のとき
+    return <View />;
+  }
+
+  // Web: カメラだけ / モバイル: カメラ＋マイク
+  if (
+    !cameraPermission.granted ||
+    (!isWeb && micPermission && !micPermission.granted)
+  ) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>
+          {isWeb
+            ? 'カメラの権限を許可してください。'
+            : 'カメラとマイクの権限を許可してください。'}
+        </Text>
+        <Button
+          onPress={async () => {
+            await requestCameraPermission();
+            if (!isWeb) {
+              await requestMicPermission();
+            }
+          }}
+          title="権限を許可する"
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
