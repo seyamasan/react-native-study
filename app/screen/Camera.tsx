@@ -1,6 +1,7 @@
 import { CameraView, CameraMode, CameraType, useCameraPermissions, useMicrophonePermissions } from 'expo-camera';
 import { useState, useEffect } from 'react';
 import { Button, Platform, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import Slider from '@react-native-community/slider';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Camera() {
@@ -11,6 +12,7 @@ export default function Camera() {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [facing, setFacing] = useState<CameraType>('back');
+  const [zoom, setZoom] = useState(0); // 0〜1
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [micPermission, requestMicPermission] = useMicrophonePermissions();
 
@@ -36,6 +38,9 @@ export default function Camera() {
   // カメラのモードを切り替え
   const onChangeModeSwitch = (value: boolean) => {
     setCameraMode(value ? 'video' : 'picture');
+
+    // なぜかiosだけズーム値が反映されないので、強制的にリセットする仕様にする
+    setZoom(0);
   };
 
   function toggleCameraFacing() {
@@ -146,8 +151,27 @@ export default function Camera() {
         style={styles.camera}
         ref={(ref) => setCamera(ref)}
         mode={cameraMode}
-        facing={facing} 
+        facing={facing}
+        zoom={zoom} // Webも対応されているが、自分の端末では動作していない
       />
+
+      {/* ズームスライダー */}
+      <View style={styles.zoomContainer}>
+        <Text style={styles.zoomLabel}>
+          {/* 1.0x〜4.0x っぽく見せてるだけ（実倍率は端末依存らしい） */}
+          {(1 + zoom * 3).toFixed(1)}x
+        </Text>
+        <Slider
+          style={styles.zoomSlider}
+          value={zoom}
+          minimumValue={0}
+          maximumValue={1}
+          onValueChange={setZoom}
+          minimumTrackTintColor="#ffffff"
+          maximumTrackTintColor="rgba(255,255,255,0.4)"
+          thumbTintColor="#ffffff"
+        />
+      </View>
 
       <View style={styles.bottomBar}>
         <View style={styles.controlsRow}>
@@ -321,5 +345,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontVariant: ['tabular-nums'],
+  },
+  zoomContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 120,
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  zoomLabel: {
+    color: '#fff',
+    marginBottom: 4,
+    fontSize: 14,
+  },
+  zoomSlider: {
+    width: '70%',
+    height: 40,
   },
 });
